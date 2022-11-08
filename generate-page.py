@@ -6,6 +6,17 @@ def writeToFile(path, content):
   file = open(path, "w")
   file.write(content)
   file.close()
+  
+def writeToBeginningOfFile(path, content):
+  read_file = open(path, "r")
+  file_content = read_file.read()
+  read_file.close()
+  file = open(path, "w")
+  file_content = content + file_content 
+  file.seek(0)
+  file.write(file_content)
+  file.close()
+
 
 # ----------------------------------------- Set according to directory  ----------------------------
 current_path = (r"Z:\programming\generate-next-code")
@@ -59,6 +70,7 @@ def create_pages(page_name):
   styles_content = f".{page_name}" + "{}"
   page_file_path = f"{page_directory}/{page_name}.js"
   page_content = 'import React from "react"; const '+page_name+' = () => { return ( <div className="'+page_name+'"> <div className="container"> <h1 className="content-header">'+page_name+'</h1> </div> </div> ); }; '
+  styles_import = f'import "../styles/{page_name}.scss";'
   # ----------------------------------------- Create page if it doesn't exist ------------------
   if os.path.exists(page_file_path):
     print("⭐ This page already exists")
@@ -66,13 +78,16 @@ def create_pages(page_name):
     print("✅ Page js file created.")
     writeToFile(page_file_path, page_content)
     writeToFile(page_style_path, styles_content)
+    print("✅ Scss added to page.")
+    writeToBeginningOfFile(f"{page_path}/_app.js", styles_import)
     
     
 def create_components(folder_name, component_name):
   # ----------------------------------------- Create styles for component ----------------------
-  component_style_path = f"{component_directory}/{component_name}.scss"
+  component_style_path = f"{styles_directory}/{component_name}.scss"
   component_style_folder_path = f"{component_directory}/{folder_name}/{component_name}.scss"
   styles_content = f".{component_name}" + "{}"
+  styles_import = f'import "../styles/{component_name}.scss";'
   # ----------------------------------------- component path and content ----------------------------
   component_file_path = f"{component_directory}/{component_name}.js"
   component_file_folder_path = f"{component_directory}/{folder_name}/{component_name}.js"
@@ -91,6 +106,7 @@ def create_components(folder_name, component_name):
       print("✅ Component js file created.")
       writeToFile(component_file_folder_path, component_content)
       writeToFile(component_style_folder_path, styles_content)
+      writeToBeginningOfFile(f"{page_path}/_app.js", styles_import)
   else:
     if os.path.exists(component_file_path):
       print("⭐ This component already exists")
@@ -98,6 +114,7 @@ def create_components(folder_name, component_name):
       print("✅ Component js file created.")
       writeToFile(component_file_path, component_content)
       writeToFile(component_style_path, styles_content)
+      writeToBeginningOfFile(f"{page_path}/_app.js", styles_import)
 
 def create_git_ignore():
   git_ignore_file_path = f"{current_path}/.gitignore"
@@ -176,8 +193,3 @@ while(create_component.lower() == "y"):
   create_components("", component_name)
   create_component = input("Would you like to create a component? [Y or N]")
 
-
- 
-
-# import styles to app everytime added
-# add possibility for component folder name
