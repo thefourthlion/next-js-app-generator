@@ -69,7 +69,7 @@ def create_pages(page_name):
   page_style_path = f"{styles_directory}/{page_name}.scss"
   styles_content = f".{page_name}" + "{}"
   page_file_path = f"{page_directory}/{page_name}.js"
-  page_content = 'import React from "react"; const '+page_name+' = () => { return ( <div className="'+page_name+'"> <div className="container"> <h1 className="content-header">'+page_name+'</h1> </div> </div> ); }; '
+  page_content = 'import React from "react"; const '+page_name+' = () => { return ( <div className="'+page_name+'"> <div className="container"> <h1 className="content-header">'+page_name+'</h1> </div> </div> ); }; export default '+page_name+';'
   styles_import = f'import "../styles/{page_name}.scss";'
   # ----------------------------------------- Create page if it doesn't exist ------------------
   if os.path.exists(page_file_path):
@@ -91,7 +91,7 @@ def create_components(folder_name, component_name):
   # ----------------------------------------- component path and content ----------------------------
   component_file_path = f"{component_directory}/{component_name}.js"
   component_file_folder_path = f"{component_directory}/{folder_name}/{component_name}.js"
-  component_content = 'import React from "react"; const '+component_name+' = () => { return ( <div className="'+component_name+'"> <div className="container"> <h1 className="content-header">'+component_name+'</h1> </div> </div> ); }; '
+  component_content = 'import React from "react"; const '+component_name+' = () => { return ( <div className="'+component_name+'"> <div className="container"> <h1 className="content-header">'+component_name+'</h1> </div> </div> ); }; export default '+page_name+';'
   # ----------------------------------------- create component if it doesn't exist ----------------------------
   if os.path.exists(f"{component_directory}/{folder_name}/"):
     print("⭐ The component folder already exists")
