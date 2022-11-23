@@ -19,7 +19,7 @@ def writeToBeginningOfFile(path, content):
 
 
 # ----------------------------------------- Set according to directory  ----------------------------
-current_path = (r"Z:\programming\generate-next-code")
+current_path = (r"Z:\programming\fire\client")
 
 component_folder = "components"
 page_folder = "pages"
@@ -34,7 +34,7 @@ public_directory = os.path.join(current_path, public_folder)
 component_path = './components/'
 page_path = './pages/'
 style_path = "./styles/"
-public_path = "./public/"
+public_path = "./"
 
 
 def create_paths():
@@ -91,7 +91,7 @@ def create_components(folder_name, component_name):
   # ----------------------------------------- component path and content ----------------------------
   component_file_path = f"{component_directory}/{component_name}.js"
   component_file_folder_path = f"{component_directory}/{folder_name}/{component_name}.js"
-  component_content = 'import React from "react"; const '+component_name+' = () => { return ( <div className="'+component_name+'"> <div className="container"> <h1 className="content-header">'+component_name+'</h1> </div> </div> ); }; export default '+page_name+';'
+  component_content = 'import React from "react"; const '+component_name+' = () => { return ( <div className="'+component_name+'"> <div className="container"> <h1 className="content-header">'+component_name+'</h1> </div> </div> ); }; export default '+component_name+';'
   # ----------------------------------------- create component if it doesn't exist ----------------------------
   if os.path.exists(f"{component_directory}/{folder_name}/"):
     print("⭐ The component folder already exists")
@@ -128,7 +128,7 @@ def create_git_ignore():
     
 def create_next_config():
   next_config_path = f"{current_path}/next.config.js"
-  next_config_content = "/** @type {import('next').NextConfig} */ const nextConfig = { reactStrictMode: true, } module.exports = nextConfig "
+  next_config_content = 'module.exports = { reactStrictMode: true, swcMinify: true, webpack(config) { config.module.rules.push({ test: /\.svg$/i, issuer: /\.[jt]sx?$/, use: ["@svgr/webpack"], }); return config; }, };'
   if os.path.exists(f"{current_path}/next.config.js"):
     print("⭐ The next config already exists")
   else:
