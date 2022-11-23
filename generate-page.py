@@ -161,7 +161,7 @@ def create_app_page():
   app_style_path = f"{style_path}/globals.scss"
   app_style_content = ".Home{}"
   app_page_path = f"{page_path}/_app.js"
-  app_page_content = 'import "../styles/globals.css"; function MyApp({ Component, pageProps }) { return <Component {...pageProps} />; } export default MyApp; '
+  app_page_content = 'import "../styles/globals.scss"; function MyApp({ Component, pageProps }) { return <Component {...pageProps} />; } export default MyApp; '
   if os.path.exists(f"{page_path}/_app.js"):
     print("⭐ The app.js already exists")
   else:
