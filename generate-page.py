@@ -19,23 +19,27 @@ def writeToBeginningOfFile(path, content):
 
 
 # ----------------------------------------- Set according to directory  ----------------------------
-current_path = (r"Z:\programming\fire\client")
+current_path = (r"Z:\programming\generate-next-code")
 
 component_folder = "components"
 page_folder = "pages"
 style_folder = "styles"
 public_folder = "public"
+images_folder = "images"
+
 
 component_directory = os.path.join(current_path, component_folder)
 page_directory = os.path.join(current_path, page_folder)
 styles_directory = os.path.join(current_path, style_folder)
 public_directory = os.path.join(current_path, public_folder)
+images_directory = os.path.join(current_path, images_folder)
+
 
 component_path = './components/'
 page_path = './pages/'
 style_path = "./styles/"
-public_path = "./"
-
+public_path = "./public/"
+images_path = "./public/images"
 
 def create_paths():
   # ----------------------------------------- Create component directory ----------------------------
@@ -62,6 +66,12 @@ def create_paths():
   else:
     print("✅ Public directory created.")
     os.mkdir(public_path)
+  # ----------------------------------------- Create public directory ----------------------------
+  if os.path.exists(images_path):
+    print("⭐ Images path exists.")
+  else:
+    print("✅ Images directory created.")
+    os.mkdir(images_path)
 
 
 def create_pages(page_name):
@@ -125,7 +135,33 @@ def create_git_ignore():
     print("✅ Git ignore file created.")
     writeToFile(git_ignore_file_path, git_ignore_content)
     
+def create_app_yml():
+  app_yml_file_path = f"{current_path}/app.yml"
+  app_yml_content = 'apps: - script: ./server.js cwd: /home/application/client/ name: "application" interpreter: /usr/bin/node'
+  if os.path.exists(f"{current_path}/app.yml"):
+    print("⭐ The app yml already exists")
+  else:
+    print("✅ app yml file created.")
+    writeToFile(app_yml_file_path, app_yml_content)
     
+def create_next_server():
+  next_server_file_path = f"{current_path}/server.js"
+  next_server_content = 'const { createServer } = require("http"); const { parse } = require("url"); const next = require("next"); const dev = process.env.NODE_ENV !== "production"; const hostname = "localhost"; const port = process.env.PORT || 3002; const app = next({ dev, hostname, port }); const handle = app.getRequestHandler(); app.prepare().then(() => { createServer(async (req, res) => { try { const parsedUrl = parse(req.url, true); const { pathname, query } = parsedUrl; if (pathname === "/a") { await app.render(req, res, "/a", query); } else if (pathname === "/b") { await app.render(req, res, "/b", query); } else { await handle(req, res, parsedUrl); } } catch (err) { console.error("Error occurred handling", req.url, err); res.statusCode = 500; res.end("internal server error"); } }).listen(port, (err) => { if (err) throw err; console.log(`> Ready on http://${hostname}:${port}`); }); }); '
+  if os.path.exists(f"{current_path}/server.js"):
+    print("⭐ The next server already exists")
+  else:
+    print("✅ next server file created.")
+    writeToFile(next_server_file_path, next_server_content)
+
+def create_sitemap_generator():
+  sitemap_file_path = f"{current_path}/site-map-generator.js"
+  sitemap_content = 'const sitemap = require("nextjs-sitemap-generator"); sitemap({ baseUrl: "https://twainharteace.com/", ignoredPaths: ["admin", "login"], ignoredExtensions: [ "js", "map", "json", "png", "jpeg", "jpg", "svg", "icon", "mp4", ], extraPaths: ["/extraPath"], pagesDirectory: __dirname + "/.next/server/pages", targetDirectory: "public/", sitemapFilename: "sitemap.xml", nextConfigPath: __dirname + "/next.config.js", }); '
+  if os.path.exists(f"{current_path}/site-map-generator.js"):
+      print("⭐ The site map already exists")
+  else:
+    print("✅ site map file created.")
+    writeToFile(sitemap_file_path, sitemap_content)
+
 def create_next_config():
   next_config_path = f"{current_path}/next.config.js"
   next_config_content = 'module.exports = { reactStrictMode: true, swcMinify: true, webpack(config) { config.module.rules.push({ test: /\.svg$/i, issuer: /\.[jt]sx?$/, use: ["@svgr/webpack"], }); return config; }, };'
@@ -174,6 +210,9 @@ def create_app_page():
     
 create_paths()
 create_git_ignore()
+create_next_server()
+create_app_yml()
+create_sitemap_generator()
 create_next_config()
 create_package_json()
 create_index_page()
